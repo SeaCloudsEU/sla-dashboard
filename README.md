@@ -98,6 +98,6 @@ NOTE: this steps are not suitable in production mode.
 
 ##License##
 
-Licensed under the [Apache License, Version 2.0][8]
+Licensed under the [Apache License, Version 2.0][1]
 
 [1]: http://www.apache.org/licenses/LICENSE-2.0
