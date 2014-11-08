@@ -95,3 +95,9 @@ NOTE: this steps are not suitable in production mode.
     #
     curl http://localhost:8000/slagui/agreements/
 
+
+##License##
+
+Licensed under the [Apache License, Version 2.0][8]
+
+[1]: http://www.apache.org/licenses/LICENSE-2.0
