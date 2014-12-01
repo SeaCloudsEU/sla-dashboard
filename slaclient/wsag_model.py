@@ -224,3 +224,21 @@ class Provider(object):
         result = Provider(d["uuid"], d["name"])
         return result
 
+
+class EnforcementJob(object):
+
+    def __init__(self, agreement_id="", enabled=False):
+        self.agreement_id = agreement_id
+        self.enabled = enabled
+
+    def __repr__(self):
+        return ("<Enforcement(agreement_id={}, enabled={})>".format(
+            self.agreement_id,
+            self.enabled
+        ))
+
+    def __eq__(self, other):
+        if not isinstance(other, EnforcementJob):
+            return False
+        return (self.agreement_id == other.agreement_id and
+                self.enabled == other.enabled)

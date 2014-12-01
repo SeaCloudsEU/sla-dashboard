@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 
 from slagui import views
+from slagui import rest
 
 urlpatterns = patterns(
     '',
@@ -54,7 +55,16 @@ urlpatterns = patterns(
         views.raw_template,
         name='raw_template'
     ),
-
+    url(
+        r'^rest/agreements$',
+        rest.agreements,
+        name='rest_agreements'
+    ),
+    url(
+        r'^rest/enforcements/(?P<agreement_id>[\w-]+)$',
+        rest.enforcements,
+        name='rest_enforcements'
+    ),
     #url(r'^consumer/(?P<consumer_id>\w+)$', views.consumer_agreements, name='consumer_agreements'),
 
     #url(r'^/?$', views.home, name='home'),

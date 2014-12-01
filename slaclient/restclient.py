@@ -30,7 +30,7 @@ import wsag_model
 _PROVIDERS_PATH = "providers"
 _AGREEMENTS_PATH = "agreements"
 _VIOLATIONS_PATH = "violations"
-_ENFORCEMENTJOBS_PATH = "enforcementjobs"
+_ENFORCEMENTJOBS_PATH = "enforcements"
 _TEMPLATES_PATH = "templates"
 
 
@@ -64,6 +64,11 @@ class Factory(object):
         """Returns a REST client for Templates
         """
         return Templates(self.rooturl)
+
+    def enforcements(self):
+        """Returns a REST client for EnforcementJobs
+        """
+        return Enforcements(self.rooturl)
 
 
 class Client(object):
@@ -135,6 +140,32 @@ class Client(object):
             if "location" in result.headers else "<null>"
         print "POST {} {} Location: {}".format(
             result.url, result.status_code, location)
+        return result
+
+    def put(self, path, data=None, **kwargs):
+        """Just a wrapper over request.put, just in case
+
+        :rtype : request.Response
+        :param str path: remaining path from root url;
+            empty if desired path equal to rooturl.
+        :param dict[str, str] kwargs: arguments to requests.put
+
+        Example:
+            c = Client("http://localhost:8080/service")
+            c.put(
+                '/resource',
+                '{ "id": "1", "name": "provider-a" }',
+                headers = {
+                    "content-type": "application/json",
+                    "accept": "application/xml"
+                }
+            )
+        """
+        url = _buildpath_(self.rooturl, path)
+        request_args = self._build_request_args(kwargs)
+        result = requests.put(url, data, **request_args)
+        print "PUT {} {}".format(
+            result.url, result.status_code)
         return result
 
     def _build_request_args(self, kwargs):
@@ -395,6 +426,47 @@ class Violations(object):
         """
         return self.res.get(
             {"agreementId": agreement_id, "guaranteeTerm": term})
+
+
+class Enforcements(object):
+
+    def __init__(self, root_url, path=_ENFORCEMENTJOBS_PATH):
+        """Business methods for Enforcement resource
+        :param str root_url: url to the root of resources
+        :param str path: path to resource from root_url
+
+        The final url to the resource is root_url + "/" + path
+        """
+        resourceurl = _buildpath_(root_url, path)
+        converter = xmlconverter.EnforcementConverter()
+        self.res = _Resource(resourceurl, converter)
+
+    def getall(self):
+        """ Get all enforcemnt jobs
+        :rtype : list[wsag_model.EnforcementJob]
+        """
+        return self.res.getall()
+
+    def getbyid(self, agreement_id):
+        """Get an enforcement job
+
+        :rtype : wsag_model.EnforcementJob
+        """
+        return self.res.getbyid(agreement_id)
+
+    def start(self, agreement_id):
+        """Starts an enforcement job"""
+        return self._operation(agreement_id, "start")
+
+    def stop(self, agreement_id):
+        """Stops an enforcement job"""
+        return self._operation(agreement_id, "stop")
+
+    def _operation(self, agreement_id, operation):
+        path = _buildpath_(agreement_id, operation)
+        r = self.res.client.put(path)
+        r.raise_for_status()
+        return r
 
 
 def _buildpath_(*paths):

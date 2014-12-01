@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2014 Atos
+    Contact: Atos <roman.sosa@atos.net>
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<wsag:Template xmlns:wsag="http://www.ggf.org/namespaces/ws-agreement" xmlns:sla="http://sla.atos.eu" wsag:TemplateId="template" wsag:AgreementId="${application}">
+	<wsag:Name>Nuro</wsag:Name>
+	<wsag:Context>
+		<wsag:AgreementInitiator>${consumer}</wsag:AgreementInitiator>
+	    <wsag:AgreementResponder>nuro</wsag:AgreementResponder>
+		<wsag:ServiceProvider>AgreementResponder</wsag:ServiceProvider>
+		<wsag:ExpirationTime>${expirationtime}</wsag:ExpirationTime>
+		<wsag:TemplateId>${templateid}</wsag:TemplateId>
+		<sla:Service xmlns:sla="http://sla.atos.eu">seaclouds</sla:Service>
+	</wsag:Context>
+	<wsag:Terms>
+		<wsag:All>
+			<wsag:ServiceProperties wsag:Name="NonFunctional" wsag:ServiceName="default">
+				<wsag:Variables>
+					<wsag:Variable wsag:Name="ResponseTime" wsag:Metric="xs:double">
+						<wsag:Location>qos:ResponseTime</wsag:Location>
+					</wsag:Variable>
+					<wsag:Variable wsag:Name="nuro.analytics_time" wsag:Metric="xs:double">
+						<wsag:Location>nuro.analytics_time</wsag:Location>
+					</wsag:Variable>
+				</wsag:Variables>
+			</wsag:ServiceProperties>
+			<wsag:GuaranteeTerm wsag:Name="AnalyticsTime">
+				<wsag:ServiceScope wsag:ServiceName="default">${entity}</wsag:ServiceScope>
+				<wsag:ServiceLevelObjective>
+					<wsag:KPITarget>
+						<wsag:KPIName>AnalyticsTime</wsag:KPIName>
+						<wsag:CustomServiceLevel>{"constraint" : "nuro.analytics_time LT 0.6"}</wsag:CustomServiceLevel>
+					</wsag:KPITarget>
+				</wsag:ServiceLevelObjective>
+			</wsag:GuaranteeTerm>
+			<wsag:GuaranteeTerm wsag:Name="HourRuntime">
+				<wsag:ServiceScope wsag:ServiceName="default">${entity}</wsag:ServiceScope>
+				<wsag:ServiceLevelObjective>
+					<wsag:KPITarget>
+						<wsag:KPIName>HourRuntime</wsag:KPIName>
+						<wsag:CustomServiceLevel>{"constraint" : "nuro.hour.avg_run_time LT 0.5"}</wsag:CustomServiceLevel>
+					</wsag:KPITarget>
+				</wsag:ServiceLevelObjective>
+			</wsag:GuaranteeTerm>
+			<wsag:GuaranteeTerm wsag:Name="MinuteRuntime">
+				<wsag:ServiceScope wsag:ServiceName="default">${entity}</wsag:ServiceScope>
+				<wsag:ServiceLevelObjective>
+					<wsag:KPITarget>
+						<wsag:KPIName>MinuteRuntime</wsag:KPIName>
+						<wsag:CustomServiceLevel>{"constraint" : "nuro.minute.avg_run_time LT 0.5"}</wsag:CustomServiceLevel>
+					</wsag:KPITarget>
+				</wsag:ServiceLevelObjective>
+			</wsag:GuaranteeTerm>
+		</wsag:All>
+	</wsag:Terms>
+</wsag:Template>
+

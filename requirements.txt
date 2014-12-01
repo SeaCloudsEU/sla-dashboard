@@ -15,3 +15,6 @@ requests
 
 # Simplified BSD http://bazaar.launchpad.net/~dateutil/dateutil/trunk/view/head:/LICENSE
 python-dateutil<2.0
+
+# http://www.django-rest-framework.org/#license
+djangorestframework<3.0

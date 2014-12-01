@@ -30,6 +30,7 @@ from wsag_model import Agreement
 from wsag_model import Template
 from wsag_model import Violation
 from wsag_model import Provider
+from wsag_model import EnforcementJob
 
 
 def convertfile(converter, f):
@@ -297,6 +298,29 @@ class AgreementConverter(Converter):
         return dst.text
 
 
+class EnforcementConverter(Converter):
+    """Converter for an enforcement job.
+
+    Input:
+        <enforcementJobs>
+          <enforcement_job>
+            <agreement_id>0c6dc1e6-7e40-46b1-b860-fceaa54ab543</agreement_id>
+            <enabled>true</enabled>
+          </enforcement_job>
+        </enforcementJobs>
+    Output:
+        wsag_model.EnforcementJob
+    """
+    def __init__(self):
+        super(EnforcementConverter, self).__init__()
+
+    def convert(self, xmlroot):
+        result = EnforcementJob()
+        result.agreement_id = xmlroot.find("agreement_id").text
+        result.enabled = (xmlroot.find("enabled").text == "true")
+        return result
+
+
 def _get_attribute(element, attrname):
     """
     Get attribute from an element.
@@ -320,7 +344,7 @@ def _get_attribute(element, attrname):
     #   attrname = {uri}name
     #
     if isns:
-        return element.attrib[attrname]
+        return element.attrib.get(attrname, "")
 
     #
     # Handle non-qnamed request and non-qnamed actual_attr
@@ -328,7 +352,7 @@ def _get_attribute(element, attrname):
     #   actual_attr = name
     #
     if attrname in element.attrib:
-        return element.attrib[attrname]
+        return element.attrib.get(attrname, "")
 
     #
     # Handle non-qnamed request but qnamed actualAttr
@@ -336,4 +360,5 @@ def _get_attribute(element, attrname):
     #   actual_attr = {uri}name
     #
     tag_uri = element.tag[0: element.tag.find('}') + 1]
-    return element.attrib[tag_uri + attrname]
+    return element.attrib.get(tag_uri + attrname, "")
+
