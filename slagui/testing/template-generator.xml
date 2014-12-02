@@ -17,7 +17,7 @@
        limitations under the License.
 
 -->
-<wsag:Template xmlns:wsag="http://www.ggf.org/namespaces/ws-agreement" xmlns:sla="http://sla.atos.eu" wsag:TemplateId="template" wsag:AgreementId="${application}">
+<wsag:Template xmlns:wsag="http://www.ggf.org/namespaces/ws-agreement" xmlns:sla="http://sla.atos.eu" wsag:TemplateId="templateid">
 	<wsag:Name>Nuro</wsag:Name>
 	<wsag:Context>
 		<wsag:AgreementInitiator>${consumer}</wsag:AgreementInitiator>
@@ -40,7 +40,7 @@
 				</wsag:Variables>
 			</wsag:ServiceProperties>
 			<wsag:GuaranteeTerm wsag:Name="AnalyticsTime">
-				<wsag:ServiceScope wsag:ServiceName="default">${entity}</wsag:ServiceScope>
+				<wsag:ServiceScope wsag:ServiceName="default">${application}/${entity}</wsag:ServiceScope>
 				<wsag:ServiceLevelObjective>
 					<wsag:KPITarget>
 						<wsag:KPIName>AnalyticsTime</wsag:KPIName>
@@ -49,7 +49,7 @@
 				</wsag:ServiceLevelObjective>
 			</wsag:GuaranteeTerm>
 			<wsag:GuaranteeTerm wsag:Name="HourRuntime">
-				<wsag:ServiceScope wsag:ServiceName="default">${entity}</wsag:ServiceScope>
+				<wsag:ServiceScope wsag:ServiceName="default">${application}/${entity}</wsag:ServiceScope>
 				<wsag:ServiceLevelObjective>
 					<wsag:KPITarget>
 						<wsag:KPIName>HourRuntime</wsag:KPIName>
@@ -58,7 +58,7 @@
 				</wsag:ServiceLevelObjective>
 			</wsag:GuaranteeTerm>
 			<wsag:GuaranteeTerm wsag:Name="MinuteRuntime">
-				<wsag:ServiceScope wsag:ServiceName="default">${entity}</wsag:ServiceScope>
+				<wsag:ServiceScope wsag:ServiceName="default">${application}/${entity}</wsag:ServiceScope>
 				<wsag:ServiceLevelObjective>
 					<wsag:KPITarget>
 						<wsag:KPIName>MinuteRuntime</wsag:KPIName>

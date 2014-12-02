@@ -1,6 +1,7 @@
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import uuid
 
 
 class AgreementParams(object):
@@ -46,9 +47,12 @@ class AgreementGenerator(object):
         tpl = self.template
         params = self.parameters
 
+        templateid_attr = 'wsag:TemplateId="{}"'.format(params.templateid)
+        agreement_id = str(uuid.uuid4())
+        agreementid_attr = 'wsag:AgreementId="{}"'.format(agreement_id)
         agreement = tpl\
             .replace("<wsag:Template ", "<wsag:Agreement ")\
-            .replace("wsag:TemplateId=\"{}\"".format(params.templateid), "")\
+            .replace(templateid_attr, agreementid_attr)\
             .replace("${application}", params.appid)\
             .replace("${consumer}", params.consumerid)\
             .replace("${templateid}", params.templateid)\
@@ -56,4 +60,4 @@ class AgreementGenerator(object):
             .replace("</wsag:Template>", "</wsag:Agreement>")
             #.replace("${expirationtime}", params.expirationtime)\
 
-        return agreement
+        return agreement, agreement_id

@@ -11,6 +11,7 @@ from slaclient import restclient
 
 factory = restclient.Factory(settings.SLA_MANAGER_URL)
 
+
 @api_view(['POST'])
 def agreements(request):
     """Simple generation of an agreement from a template.
@@ -52,12 +53,13 @@ def agreements(request):
         rawtemplate = response.text
 
         generator = AgreementGenerator(rawtemplate, params)
-        rawagreement = generator.do()
+        rawagreement, agreement_id = generator.do()
 
         agreementclient = factory.agreements()
         agreementclient.create(rawagreement)
 
-        return Response(data=rawagreement, content_type="application/xml")
+        result = dict(id=agreement_id)
+        return Response(data=result, content_type="text/plain")
     else:
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -70,7 +72,7 @@ def enforcements(request, agreement_id):
 
 
 def _parse_input(jsondata):
-    """Parse jsondata into a dict. Return None if any field is lacking"""
+    """Parse jsondata into a dict. Raise ValueError if any field is lacking"""
     d = json.loads(jsondata)
     return AgreementParams(
         templateid=d.get("templateid"),

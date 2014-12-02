@@ -1,9 +1,9 @@
 
 import unittest
+
 from slagui.generator import AgreementGenerator
 from slagui.generator import AgreementParams
 
-from sys import path
 
 class TestGenerator(unittest.TestCase):
 
@@ -14,7 +14,7 @@ class TestGenerator(unittest.TestCase):
         params = AgreementParams(
             "templateid", "consumerid", "appid", "moduleid")
         generator = AgreementGenerator(template, params)
-        agreement = generator.do()
+        agreement, agreement_id = generator.do()
         print(agreement)
         self.assertEqual(True, False)
 
