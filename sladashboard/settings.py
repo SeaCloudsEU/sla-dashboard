@@ -94,8 +94,9 @@ PORTALINSTANCE = False
 #
 
 # SlaManager root url
-SLA_MANAGER_URL="http://127.0.0.1:8080/sla-service"
+SLA_MANAGER_URL="http://127.0.0.1:8082/sla-service"
 # Development Internal IPs
 INTERNAL_IPS=("127.0.0.1",)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+

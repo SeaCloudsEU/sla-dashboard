@@ -6,7 +6,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'sla.views.home', name='home'),
-    url(r'^slagui/', include('slagui.urls')),
+    url(r'^projects/seaclouds/slagui/', include('slagui.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^projects/seaclouds/slagui/admin/', include(admin.site.urls)),
 )
