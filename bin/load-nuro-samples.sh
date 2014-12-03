@@ -18,8 +18,10 @@
 #
 # Sample usage of REST facade.
 #
-# Usage: $0 <templateid> <appid> <entityid>
-#   E.g.: $0 nuro-template b8fFlGVm EjmAYSpg
+# Usage: $0 <templateid> <consumerid> <appid> <entityid>
+#   E.g.: 
+#       $0 nuro-template random-client b8fFlGVm EjmAYSpg
+#       $0 nuro-template-cloud nuro b8fFlGVm EjmAYSpg
 #
 # Use env var SLA_DASHBOARD_URL to set dashboard root url
 #
@@ -29,17 +31,36 @@ if [ "$0" != "bin/load-nuro-samples.sh" ]; then
     exit 1
 fi
 
-if [ $# -lt 3 ]; then
-        echo "Usage: $0 <templateid> <appid> <entityid>"
+if [ $# -lt 4 ]; then
+        echo "Usage: $0 <templateid> <consumerid> <appid> <entityid>"
         exit 1
 fi
 
+function get_json_attr() {
+    local result
+
+    JSON=$1
+    ATTR=$2
+    result=$(echo "$JSON" | python -c "import json,sys;obj=json.load(sys.stdin); print obj['$ATTR'];")
+    echo "$result"
+}
+
+function do_agreement() {
+    # $1: templateid
+    # $2: consumerid
+    # $3: appid
+    # $4: moduleid
+
+    JSON="{\"templateid\": \"$1\", \"consumerid\": \"$2\", \"appid\": \"$3\", \"moduleid\": \"$4\"}"
+
+    # generate and store agreement
+    out=$(curl "$SLA_DASHBOARD_URL/slagui/rest/agreements" -X POST -d"$JSON" -H"Content-type: application/json")
+
+    agreement_id=$(get_json_attr "$out" "id")
+    # start enforcement
+    curl "$SLA_DASHBOARD_URL/slagui/rest/enforcements/$agreement_id" -X PUT
+}
+
 SLA_DASHBOARD_URL=${SLA_DASHBOARD_URL:-http://localhost:8000}
 
-JSON="{\"templateid\": \"$1\", \"consumerid\": \"random-client\", \"appid\": \"$2\", \"moduleid\": \"$3\"}"
-
-# generate and store agreement
-curl -v "$SLA_DASHBOARD_URL/slagui/rest/agreements" -X POST -d"$JSON" -H"Content-type: application/json"
-
-# start enforcement
-curl -v "$SLA_DASHBOARD_URL/slagui/rest/enforcements/$2" -X PUT
+do_agreement "$1" "$2" "$3" "$4"
