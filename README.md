@@ -62,7 +62,7 @@ SLA Manager (java backend) needs to be running in order to use the dashboard.
 
 ## Settings ##
 
-* sladashboard/settings.py:
+* sladashboard/settings.py (overridable with env vars of the same name):
     - SLA_MANAGER_URL : The URL of the SLA Manager REST interface.
     - DEBUG: Please, set this to FALSE in production
 
@@ -94,27 +94,6 @@ NOTE: this steps are not suitable in production mode.
     # Test
     #
     curl http://localhost:8000/slagui/agreements/
-
-## REST Facade Example ##
-
-Initial conditions:
-
-* Brooklyn is running and nuro application is deployed.
-* Sla-core is running and loaded with `nuro-template` template:
-
-
-    cd $SLA_CORE && bin/restoreDatabase.sh && bin/load-nuro-samples.sh
-
-To create an agreement from that template and start the enforcement:
-
-    cd $SLA_DASHBOARD
-    SLA_DASHBOARD_URL=http://localhost:8000 bin/load-nuro-samples.sh \
-        nuro-template random-client $appid $moduleid
-
-, where $appid and $moduleid are the ids of the brooklyn application and
-brooklyn php module, respectively.
-
-Check agreement creation in $SLA_DASHBOARD_URL/slagui/agreements
 
 ##License##
 
